@@ -18,9 +18,9 @@ public class GameManager {
         playerCharacter = new PlayerCharacter(map.rooms.get(0).x + 1, map.rooms.get(0).y + 1);
         map.mapTiles[playerCharacter.gridPosition.x][playerCharacter.gridPosition.y] = 'C';
 
-        enemies[0] = new Enemy(map.rooms.get(1).x + 2, map.rooms.get(1).y + 2, 'G');
-        enemies[1] = new Enemy(map.rooms.get(3).x + 1, map.rooms.get(1).y + 1, 'Z');
-        enemies[2] = new Enemy(map.rooms.get(5).x + 1, map.rooms.get(1).y + 1, 'M');
+        enemies[0] = new Enemy(map.rooms.get(1).x + 2, map.rooms.get(1).y + 2, 1,'G');
+        enemies[1] = new Enemy(map.rooms.get(3).x + 1, map.rooms.get(1).y + 1, 6,'Z');
+        enemies[2] = new Enemy(map.rooms.get(5).x + 1, map.rooms.get(1).y + 1, 3,'M');
 
         map.mapTiles[enemies[0].gridPosition.x][enemies[0].gridPosition.y] = enemies[0].symbol;
 

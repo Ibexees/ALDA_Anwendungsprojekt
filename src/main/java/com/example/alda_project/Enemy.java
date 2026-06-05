@@ -6,11 +6,11 @@ public class Enemy {
     int speed;
     Character symbol;
 
-    public Enemy(int x, int y, Character symbol)
+    public Enemy(int x, int y,int speed, Character symbol)
     {
         this.symbol = symbol;
         this.gridPosition = new GridPosition(x,y);
-
+        this.speed = speed;
     }
 
     public static void selectionSort(Enemy[] enemies) {
