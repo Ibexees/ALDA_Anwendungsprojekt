@@ -8,14 +8,24 @@ public class Room {
     int y;
     int width;
     int height;
+    static int roomCount = 0;
+    int id;
 
     public Room(int mapWidth, int mapHeight)
     {
+
         width = random(7, 13);
         height = random(7, 13);
 
         x = random(0, mapWidth - width);
         y = random(0, mapHeight - height);
+        id = roomCount;
+        roomCount = roomCount +1;
+    }
+
+    public double distanceTo(Room other) {
+        // TODO: euklidische Distanz berechnen
+        return .0;
     }
 
     public Room(int x, int y, int width, int height)

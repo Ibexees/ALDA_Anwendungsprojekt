@@ -1,13 +1,13 @@
 package com.example.alda_project;
 
-import com.almasb.fxgl.core.math.Vec2;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.almasb.fxgl.core.math.FXGLMath.random;
 
-public class Map {
+public class GameMap {
 
     Character[][] mapTiles;
     int mapWidth;
@@ -15,16 +15,18 @@ public class Map {
     List<Room> rooms = new ArrayList<Room>();
     static final int ROOMCOUNT = 7;
     GridPosition stairsPos;
+    Map<Room, List<Edge>> adjacencyList = new HashMap<>();
 
 
 
 
 
-    public Map(int mapWidth, int mapHeight)
+    public GameMap(int mapWidth, int mapHeight)
     {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
         mapTiles = new Character[mapWidth][mapHeight];
+
 
     }
 
@@ -84,8 +86,10 @@ public class Map {
             if(!checkIfRoomOverlaps(room))
             {
                 addRoom(room);
+                adjacencyList.put(room, new ArrayList<>());
             }
         }
+
 
     }
 

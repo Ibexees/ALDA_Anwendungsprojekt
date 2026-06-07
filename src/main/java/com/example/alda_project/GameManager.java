@@ -2,7 +2,7 @@ package com.example.alda_project;
 import static com.almasb.fxgl.core.math.FXGLMath.random;
 
 public class GameManager {
-    Map map;
+    GameMap map;
     PlayerCharacter playerCharacter;
     Enemy[] enemies = new Enemy[3];
 
@@ -10,7 +10,7 @@ public class GameManager {
 
     public void StartGame()
     {
-        Map map = new Map(50,50);
+        GameMap map = new GameMap(50,50);
         map.addRoomsToMap();
         map.spawnStairs();
 
