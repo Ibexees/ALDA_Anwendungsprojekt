@@ -14,6 +14,8 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         GameManager gameManager = new GameManager();
         gameManager.StartGame();
+        //System.out.println(gameManager.map.findRoomMiddlepoint(gameManager.map.rooms.get(0)));
+
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);

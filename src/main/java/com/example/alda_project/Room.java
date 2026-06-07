@@ -11,6 +11,54 @@ public class Room {
     static int roomCount = 0;
     int id;
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public static int getRoomCount() {
+        return roomCount;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public static void setRoomCount(int roomCount) {
+        Room.roomCount = roomCount;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Room(int mapWidth, int mapHeight)
     {
 
