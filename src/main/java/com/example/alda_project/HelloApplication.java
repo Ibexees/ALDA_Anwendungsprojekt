@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 public class HelloApplication extends Application {
 
@@ -14,6 +15,11 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         GameManager gameManager = new GameManager();
         gameManager.StartGame();
+        /*System.out.println("Enemy 0:" + gameManager.enemies[0].gridPosition);
+        System.out.println("Player :" + gameManager.playerCharacter.gridPosition);
+        List<GridPosition> path =(gameManager.map.findNextMove(gameManager.enemies[0].gridPosition, gameManager.playerCharacter.gridPosition));*/
+
+
         //System.out.println(gameManager.map.findRoomMiddlepoint(gameManager.map.rooms.get(0)));
 
 

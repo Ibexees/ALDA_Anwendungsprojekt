@@ -18,11 +18,13 @@ public class GameManager {
         playerCharacter = new PlayerCharacter(map.rooms.get(0).x + 1, map.rooms.get(0).y + 1);
         map.mapTiles[playerCharacter.gridPosition.x][playerCharacter.gridPosition.y] = 'C';
 
-        enemies[0] = new Enemy(map.rooms.get(1).x + 2, map.rooms.get(1).y + 2, 1,'G');
-        enemies[1] = new Enemy(map.rooms.get(3).x + 1, map.rooms.get(1).y + 1, 6,'Z');
-        enemies[2] = new Enemy(map.rooms.get(5).x + 1, map.rooms.get(1).y + 1, 3,'M');
+        enemies[0] = new Enemy(map.rooms.get(1).x + 3, map.rooms.get(1).y + 3, 1,'G');
+        enemies[1] = new Enemy(map.rooms.get(3).x + 1, map.rooms.get(3).y + 1, 6,'Z');
+        enemies[2] = new Enemy(map.rooms.get(5).x + 1, map.rooms.get(5).y + 1, 3,'M');
 
-        map.mapTiles[enemies[0].gridPosition.x][enemies[0].gridPosition.y] = enemies[0].symbol;
+        for(Enemy enemy : enemies) {
+            map.mapTiles[enemy.gridPosition.x][enemy.gridPosition.y] = enemy.symbol;
+        }
 
         map.printMap();
         this.playerCharacter = playerCharacter;
@@ -30,7 +32,22 @@ public class GameManager {
 
     }
 
+    public void moveEnemiesTowardsPlayer(GridPosition playerPosition)
+    {
+        for(Enemy enemy : enemies) {
+            System.out.println("Name:" + enemy.symbol + " Gridposition:" +enemy.gridPosition);
+            GridPosition nextMove = map.findPath(new GridPosition(enemy.gridPosition.x,enemy.gridPosition.y), new GridPosition(playerPosition.x,playerPosition.y)).get(1);
 
+            GridPosition oldPos = enemy.gridPosition;
+            Character swapSymbol = map.mapTiles[nextMove.x][nextMove.y];
+            map.mapTiles[nextMove.x][nextMove.y] = enemy.symbol;
+            map.mapTiles[oldPos.x][oldPos.y] = swapSymbol;
+
+            enemy.gridPosition = nextMove;
+            System.out.println("Name:" + enemy.symbol + " Gridposition:" +enemy.gridPosition);
+        }
+
+    }
 
     public void playerMove(Direction direction)
     {
@@ -58,7 +75,7 @@ public class GameManager {
             System.out.println("Wallchicken");
         }
 
-
+        moveEnemiesTowardsPlayer(playerCharacter.gridPosition);
 
 
         map.printMap();

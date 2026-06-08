@@ -5,6 +5,6 @@ Setting: Es gibt eine Gridbasierte Kate 2D Array auf diesem befinden sich der Sp
 
 
 Algorithmus1: Gegner sollen den Spieler finden und dabei Wänden ausweichen. (Pathfinding A*)
-Algorithmus2: Die spielbare Map soll procedural oder zumindest interressanter als "Place Random Tiles in Range" generiert werden. (Random Rooms verbunden mit Minimum spanning tree)
-Algorithmus3: Überprüfung ob alle Dungeonräume verbunden via DFS/BFS
-Datenstruktur: Die Gegner sollen abhängig von ihrer Geschwindigkeit nach einander dran kommen (MaxHeap).
+Algorithmus2: Die spielbare Map soll mit random generierten Räumen befüllt werden, diese Räume werden über Korridore verbunden. (Random Rooms verbunden mit Minimum spanning tree (Kruskal))
+Algorithmus3: Die Gegner sollen abhängig von ihrer Geschwindigkeit nach einander dran kommen (Selection Sort)
+Datenstruktur: Graph für Räume und weiters MST und Korridore (Disjoint_Set, Adjazenzmatrix).

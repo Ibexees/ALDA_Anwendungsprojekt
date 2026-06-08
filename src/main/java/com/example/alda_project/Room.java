@@ -65,16 +65,13 @@ public class Room {
         width = random(7, 13);
         height = random(7, 13);
 
-        x = random(0, mapWidth - width);
-        y = random(0, mapHeight - height);
+        x = random(1, mapWidth-1 - width);
+        y = random(1, mapHeight-1 - height);
         id = roomCount;
         roomCount = roomCount +1;
     }
 
-    public double distanceTo(Room other) {
-        // TODO: euklidische Distanz berechnen
-        return .0;
-    }
+
 
     public Room(int x, int y, int width, int height)
     {

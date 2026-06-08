@@ -33,6 +33,12 @@ public class GameMap {
         this.mapHeight = mapHeight;
         mapTiles = new Character[mapWidth][mapHeight];
 
+        for (int i = 0; i < mapWidth; i++) {
+            for (int j = 0; j < mapHeight; j++)
+            {
+                mapTiles[i][j] = '-';
+            }
+        }
 
     }
 
@@ -43,7 +49,23 @@ public class GameMap {
             return true;
         }
         else {return false;}
+    }
 
+    public Boolean isTileValid(GridPosition pos)
+    {
+        return pos.x >= 0 &&
+                pos.x < mapWidth &&
+                pos.y >= 0 &&
+                pos.y < mapHeight;
+    }
+
+    public Boolean isTileWalkable(GridPosition pos)
+    {
+        if(mapTiles[pos.x][pos.y] != '#' && mapTiles[pos.x][pos.y] != '-')
+        {
+            return true;
+        }
+        return false;
     }
 
     public void spawnStairs()
@@ -160,8 +182,43 @@ public class GameMap {
                 digVertical(start, end);
                 digHorizontal(start,end);
             }
+        }
+        buildWalls();
+    }
+
+    private void buildWalls() {
+
+        for (int i = 0; i < mapWidth; i++)
+        {
+            for(int j = 0; j < mapHeight; j++)
+            {
+                if(mapTiles[i][j] == '.')
+                {
+                    if(i+1 < mapWidth && mapTiles[i+1][j]=='-')
+                    {
+                        mapTiles[i+1][j]='#';
+                    }
+                    if(i-1 >= 0 && mapTiles[i-1][j]=='-')
+                    {
+                        mapTiles[i-1][j]='#';
+                    }
+                    if(j-1 >= 0 && mapTiles[i][j-1]=='-')
+                    {
+                        mapTiles[i][j-1]='#';
+                    }
+                    if(j+1 < mapHeight && mapTiles[i][j+1]=='-')
+                    {
+                        mapTiles[i][j+1]='#';
+                    }
+
+
+                }
+
+            }
 
         }
+
+
     }
 
     private void digHorizontal(GridPosition start, GridPosition end)
@@ -171,20 +228,6 @@ public class GameMap {
         while(current.x != end.x)
         {
             mapTiles[current.x][current.y] = '.';
-
-            //Generate new Wall Tiles
-            GridPosition wallAboveCurrent = new GridPosition(current.x, current.y-1);
-            GridPosition wallBenethCurrent = new GridPosition(current.x, current.y +1);
-
-
-            if(!isInAnyRoom(wallAboveCurrent))
-            {
-                mapTiles[wallAboveCurrent.x][wallAboveCurrent.y] = '#';
-            }
-            if(!isInAnyRoom(wallBenethCurrent))
-            {
-                mapTiles[wallAboveCurrent.x][wallAboveCurrent.y] = '#';
-            }
 
             if(current.x < end.x)
             {
@@ -206,20 +249,6 @@ public class GameMap {
         while(current.y != end.y)
         {
             mapTiles[current.x][current.y] = '.';
-
-            //Generate new Wall Tiles
-            GridPosition wallLeftOfCurrent = new GridPosition(current.x-1, current.y);
-            GridPosition wallRightOfCurrent = new GridPosition(current.x+1, current.y);
-
-
-            if(!isInAnyRoom(wallLeftOfCurrent))
-            {
-                mapTiles[wallLeftOfCurrent.x][wallLeftOfCurrent.y] = '#';
-            }
-            if(!isInAnyRoom(wallRightOfCurrent))
-            {
-                mapTiles[wallRightOfCurrent.x][wallRightOfCurrent.y] = '#';
-            }
 
             if(current.y < end.y)
             {
@@ -290,11 +319,11 @@ public class GameMap {
         rooms.add(room);
         for (int i = room.x; i < room.x + room.width; i++) {
             for (int j = room.y; j < room.y + room.height; j++) {
-                if (i == room.x || j == room.y || i == room.x + room.width-1 || j == room.y + room.height-1) {
+                /*if (i == room.x || j == room.y || i == room.x + room.width-1 || j == room.y + room.height-1) {
                     mapTiles[i][j] = '#';
-                } else {
+                } else {*/
                     mapTiles[i][j] = '.';
-                }
+                //}
 
             }
 
@@ -309,14 +338,8 @@ public class GameMap {
         {
             for(int j = 0; j < mapHeight; j++)
             {
-                if(mapTiles[i][j] != null)
-                {
+
                     System.out.print(mapTiles[i][j]);
-                }
-                else
-                {
-                    System.out.print('-');
-                }
 
             }
             System.out.println();
@@ -328,5 +351,122 @@ public class GameMap {
     }
 
 
+    public List<GridPosition> findPath(GridPosition start, GridPosition goal)
+    {
+        start.g = 0;
+        start.h = ManhattanDistance(start,goal);
+        start.f = start.g + start.h;
+
+        List<GridPosition> openList = new ArrayList<>();
+        openList.add(start);
+
+        List<GridPosition> closedList = new ArrayList<>();
+
+        while(!openList.isEmpty())
+        {
+            Collections.sort(openList);
+            GridPosition current = openList.get(0);
+
+            if(current.equals(goal))
+            {
+                return reconstruct_path(current);
+            }
+
+            closedList.add(current);
+            openList.remove(current);
+
+            //check neighbors
+            int[][] direction =
+                {
+                    {0,-1},
+                    {0, 1},
+                    {-1, 0},
+                    {1, 0}
+                };
+
+
+
+            for(int[] dir : direction)
+            {
+                int newX = current.x + dir[0];
+                int newY = current.y + dir[1];
+                GridPosition neighbor = new GridPosition(newX,newY);
+
+                if(isTileValid(neighbor) && isTileWalkable(neighbor)) {
+
+                    if (closedList.contains(neighbor)) {
+                        continue;
+                    }
+
+                    int newG = current.g + 1;
+
+                    GridPosition neighborAlreadyInList = findInOpenList(neighbor, openList);
+
+                    if (neighborAlreadyInList == null) {
+                        neighbor.parent = current;
+                        neighbor.g = newG;
+                        neighbor.h = ManhattanDistance(neighbor, goal);
+                        neighbor.f = neighbor.g + neighbor.h;
+                        openList.add(neighbor);
+                    }
+                    else if(neighborAlreadyInList.g > newG)
+                    {
+                        neighborAlreadyInList.parent = current;
+                        neighborAlreadyInList.g = newG;
+                        neighborAlreadyInList.f = neighborAlreadyInList.g + neighborAlreadyInList.h;
+                    }
+
+
+                }
+            }
+        }
+
+
+        return null;
+
+    }
+
+    private List<GridPosition> reconstruct_path(GridPosition current)
+    {
+        List<GridPosition> path = new ArrayList<>();
+        while(current != null)
+        {
+            path.add(current);
+            current = current.parent;
+        }
+
+
+        Collections.reverse(path);
+
+        /*for(GridPosition pos : path)
+        {
+            System.out.println(pos);
+
+        }*/
+
+
+        return path;
+
+    }
+
+    private GridPosition findInOpenList(GridPosition target,
+                                        List<GridPosition> openList)
+    {
+        for(GridPosition pos : openList)
+        {
+            if(pos.equals(target))
+            {
+                return pos;
+            }
+        }
+
+        return null;
+    }
+
+    public static int ManhattanDistance(GridPosition start, GridPosition goal)
+    {
+        return Math.abs(start.x - goal.x)
+                + Math.abs(start.y - goal.y);
+    }
 
 }
