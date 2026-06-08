@@ -1,10 +1,13 @@
 package com.example.alda_project;
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.almasb.fxgl.core.math.FXGLMath.random;
 
 public class GameManager {
     GameMap map;
     PlayerCharacter playerCharacter;
-    Enemy[] enemies = new Enemy[3];
+    List<Enemy> enemies = new ArrayList<>();
 
 
 
@@ -18,9 +21,9 @@ public class GameManager {
         playerCharacter = new PlayerCharacter(map.rooms.get(0).x + 1, map.rooms.get(0).y + 1);
         map.mapTiles[playerCharacter.gridPosition.x][playerCharacter.gridPosition.y] = 'C';
 
-        enemies[0] = new Enemy(map.rooms.get(1).x + 3, map.rooms.get(1).y + 3, 1,'G');
-        enemies[1] = new Enemy(map.rooms.get(3).x + 1, map.rooms.get(3).y + 1, 6,'Z');
-        enemies[2] = new Enemy(map.rooms.get(5).x + 1, map.rooms.get(5).y + 1, 3,'M');
+        enemies.add(new Enemy(map.rooms.get(1).x + 3, map.rooms.get(1).y + 3, 1,'G'));
+        enemies.add(new Enemy(map.rooms.get(3).x + 1, map.rooms.get(3).y + 1, 6,'Z'));
+        enemies.add(new Enemy(map.rooms.get(5).x + 1, map.rooms.get(5).y + 1, 3,'M'));
 
         for(Enemy enemy : enemies) {
             map.mapTiles[enemy.gridPosition.x][enemy.gridPosition.y] = enemy.symbol;
@@ -34,19 +37,35 @@ public class GameManager {
 
     public void moveEnemiesTowardsPlayer(GridPosition playerPosition)
     {
+        List<Enemy> toRemove = new ArrayList<>();
+
         for(Enemy enemy : enemies) {
             System.out.println("Name:" + enemy.symbol + " Gridposition:" +enemy.gridPosition);
             GridPosition nextMove = map.findPath(new GridPosition(enemy.gridPosition.x,enemy.gridPosition.y), new GridPosition(playerPosition.x,playerPosition.y)).get(1);
 
             GridPosition oldPos = enemy.gridPosition;
             Character swapSymbol = map.mapTiles[nextMove.x][nextMove.y];
-            map.mapTiles[nextMove.x][nextMove.y] = enemy.symbol;
-            map.mapTiles[oldPos.x][oldPos.y] = swapSymbol;
 
-            enemy.gridPosition = nextMove;
-            System.out.println("Name:" + enemy.symbol + " Gridposition:" +enemy.gridPosition);
+           if(nextMove.equals(playerPosition))
+            {
+                toRemove.add(enemy);
+                map.mapTiles[oldPos.x][oldPos.y] = '.';
+                triggerBattle();
+            }
+            else
+            {
+                map.mapTiles[nextMove.x][nextMove.y] = enemy.symbol;
+                map.mapTiles[oldPos.x][oldPos.y] = swapSymbol;
+                enemy.gridPosition = nextMove;
+                System.out.println("Name:" + enemy.symbol + " Gridposition:" +enemy.gridPosition);
+            }
+
+
         }
-
+        for(Enemy enemy : toRemove)
+        {
+            enemies.remove(enemy);
+        }
     }
 
     public void playerMove(Direction direction)
@@ -67,12 +86,7 @@ public class GameManager {
         }
         else if(map.mapTiles[newPos.x][newPos.y] > 'A' && map.mapTiles[newPos.x][newPos.y] < 'Z')
         {
-
-            System.out.println("ded");
-        }
-        else
-        {
-            System.out.println("Wallchicken");
+            triggerBattle();
         }
 
         moveEnemiesTowardsPlayer(playerCharacter.gridPosition);
@@ -82,6 +96,12 @@ public class GameManager {
 
     }
 
+    public void triggerBattle()
+    {
+
+        System.out.println("Trigger Battle");
+
+    }
 
 
 }
