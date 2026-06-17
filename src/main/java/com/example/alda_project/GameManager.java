@@ -21,6 +21,7 @@ public class GameManager {
         playerCharacter = new PlayerCharacter(map.rooms.get(0).x + 1, map.rooms.get(0).y + 1);
         map.mapTiles[playerCharacter.gridPosition.x][playerCharacter.gridPosition.y] = 'C';
 
+        enemies.clear();
         enemies.add(new Enemy(map.rooms.get(1).x + 3, map.rooms.get(1).y + 3, 1,'G'));
         enemies.add(new Enemy(map.rooms.get(3).x + 1, map.rooms.get(3).y + 1, 6,'Z'));
         enemies.add(new Enemy(map.rooms.get(5).x + 1, map.rooms.get(5).y + 1, 3,'M'));
@@ -38,6 +39,8 @@ public class GameManager {
     public void moveEnemiesTowardsPlayer(GridPosition playerPosition)
     {
         List<Enemy> toRemove = new ArrayList<>();
+
+        Enemy.selectionSort(enemies);
 
         for(Enemy enemy : enemies) {
             System.out.println("Name:" + enemy.symbol + " Gridposition:" +enemy.gridPosition);
@@ -82,7 +85,8 @@ public class GameManager {
         }
         else if(newPos.equals(map.stairsPos))
         {
-            System.out.println("WonTon Soup");
+            System.out.println("Next Stage");
+            StartGame();
         }
         else if(map.mapTiles[newPos.x][newPos.y] > 'A' && map.mapTiles[newPos.x][newPos.y] < 'Z')
         {

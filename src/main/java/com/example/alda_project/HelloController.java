@@ -9,6 +9,6 @@ public class HelloController {
 
     @FXML
     protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
+        welcomeText.setText("C is your character, \n try to reach Stairs S \n while avoiding Enemies G, M and Z \n Use WASD to move\n The game is shown in console, \n this window is only used for input!");
     }
 }

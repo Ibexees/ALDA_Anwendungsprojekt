@@ -42,6 +42,33 @@ public class Enemy {
 
     }
 
+    public static void selectionSort(List<Enemy> enemies) {
+
+        int indexSmallestUnsorted;
+        for (int i = 0; i < enemies.size(); i++)
+        {
+            // Das am weitesten links stehende Element gilt anfangs als sortiert
+            indexSmallestUnsorted = i;
+
+            for (int j = i + 1; j < enemies.size(); j++)
+            {
+                // Nutzen von .get(index), um auf die Elemente der Liste zuzugreifen
+                if (enemies.get(indexSmallestUnsorted).speed > enemies.get(j).speed)
+                {
+                    indexSmallestUnsorted = j;
+                }
+            }
+
+            if (indexSmallestUnsorted > i)
+            {
+                // Tauschen der Elemente mithilfe von .get() und .set()
+                Enemy placeholder = enemies.get(indexSmallestUnsorted);
+                enemies.set(indexSmallestUnsorted, enemies.get(i));
+                enemies.set(i, placeholder);
+            }
+        }
+    }
+
 
 
 }
